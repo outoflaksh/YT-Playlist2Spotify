@@ -14,16 +14,16 @@ class Youtube2Spotify:
 			'Authorization' : f'Bearer {self.spotify_user_token}'
 			}
 
-	def create_spotify_playlist(self, pl_name, pl_desc, public):
+	def create_spotify_playlist(self, pl_name, pl_desc, public = None):
 		url = f'https://api.spotify.com/v1/users/{self.spotify_user_id}/playlists'
 
 		data = json.dumps({
 			'name' : pl_name,
 			'description' : pl_desc,
-			'public' : public
+			'public' : public or True
 		})
 
-		response = requests.post(url, data=data, spotify_headers=self.spotify_headers)
+		response = requests.post(url, data=data, headers=self.spotify_headers)
 
 		if response.status_code == 201:
 			print("Created playlist successfully!")
@@ -38,7 +38,7 @@ class Youtube2Spotify:
 			'type' : 'track'
 			}
 
-		response = requests.get(url, params=data, spotify_headers=self.spotify_headers)
+		response = requests.get(url, params=data, headers=self.spotify_headers)
 
 		if response.status_code == 200:
 			songs = response.json()['tracks']['items']
@@ -54,7 +54,7 @@ class Youtube2Spotify:
 			'uris' : song_uris,
 			})	
 
-		response = requests.post(url, data=data, spotify_headers=self.spotify_headers)
+		response = requests.post(url, data=data, headers=self.spotify_headers)
 
 		if response.status_code == 201:
 			print("Songs added successfully!")
@@ -80,6 +80,6 @@ class Youtube2Spotify:
 			videos = response.json()['items']
 			video_titles = []
 			for video in videos:
-				video_queries.append(video['snippet']['title'])
+				video_titles.append(video['snippet']['title'])
 
 		return video_titles
