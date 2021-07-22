@@ -1,18 +1,21 @@
 import requests
 import json
-from secrets import user_id, user_token
+from secrets import spotify_user_id, spotify_user_token, youtube_playlist_id, youtube_api_key
 
 class Youtube2Spotify:
 	def __init__(self):
-		self.user_id = user_id
-		self.user_token = user_token
-		self.headers = {
+		self.spotify_user_id = spotify_user_id
+		self.spotify_user_token = spotify_user_token
+		self.youtube_playlist_id = youtube_playlist_id
+		self.youtube_api_key = youtube_api_key
+		
+		self.spotify_headers = {
 			'Content-Type' : 'application/json',
-			'Authorization' : f'Bearer {self.user_token}'
+			'Authorization' : f'Bearer {self.spotify_user_token}'
 			}
 
 	def create_spotify_playlist(self, pl_name, pl_desc, public):
-		url = f'https://api.spotify.com/v1/users/{self.user_id}/playlists'
+		url = f'https://api.spotify.com/v1/users/{self.spotify_user_id}/playlists'
 
 		data = json.dumps({
 			'name' : pl_name,
@@ -20,7 +23,7 @@ class Youtube2Spotify:
 			'public' : public
 		})
 
-		response = requests.post(url, data=data, headers=self.headers)
+		response = requests.post(url, data=data, spotify_headers=self.spotify_headers)
 
 		if response.status_code == 201:
 			print("Created playlist successfully!")
@@ -35,7 +38,7 @@ class Youtube2Spotify:
 			'type' : 'track'
 			}
 
-		response = requests.get(url, params=data, headers=self.headers)
+		response = requests.get(url, params=data, spotify_headers=self.spotify_headers)
 
 		if response.status_code == 200:
 			songs = response.json()['tracks']['items']
@@ -51,7 +54,7 @@ class Youtube2Spotify:
 			'uris' : song_uris,
 			})	
 
-		response = requests.post(url, data=data, headers=self.headers)
+		response = requests.post(url, data=data, spotify_headers=self.spotify_headers)
 
 		if response.status_code == 201:
 			print("Songs added successfully!")
@@ -59,9 +62,24 @@ class Youtube2Spotify:
 
 		return False
 
-# converter = Youtube2Spotify()
-# q = 'Mild Orange - Some Feeling'
-# playlist_id = converter.create_spotify_playlist('test', 'test desc', True)
-# uri = converter.search_spotify(q)
-# print(playlist_id, uri)
-# converter.add_to_spotify(playlist_id, [uri])
+	def get_youtube_playlist(self):
+		url = 'https://www.googleapis.com/youtube/v3/playlistItems'
+
+		params = {
+			'part' : 'snippet',
+			'playlistId' : self.youtube_playlist_id,
+			'key' : self.youtube_api_key,
+			'maxResults' : 25
+		}
+
+		response = requests.get(url, params=params)
+
+		if response.status_code == 200:
+			total_videos = len(response.json()['items'])
+			print(f"The playlist has {total_videos} videos...")
+			videos = response.json()['items']
+			video_titles = []
+			for video in videos:
+				video_queries.append(video['snippet']['title'])
+
+		return video_titles
