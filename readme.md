@@ -1,4 +1,6 @@
 # Youtube2Spotify 
 ## Automatically fetch and replicate a YouTube songs playlist in Spotify
+![](./works-on-my-pc.svg)
+<img src = "https://forthebadge.com/images/badges/contains-tasty-spaghetti-code.svg">
 
-WIP
+Just a simple tool for music lovers who listen on many platforms to get their playlists from one platform on another as well
