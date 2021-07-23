@@ -9,15 +9,19 @@ print("\n")
 
 converter = Youtube2Spotify()
 
+# Create a new spotify playlist
 spotify_playlist_id = converter.create_spotify_playlist(pl_name, pl_desc)
 
+# Retrieve all video titles from a youtube playlist
 yt_vid_titles = converter.get_youtube_playlist()
 
-spotify_song_uris = [] 
+spotify_song_uris = []
 
+# get the song URI's from spotify if the song is found
 for video in yt_vid_titles:
     uri = converter.search_spotify(video)
     if uri:
         spotify_song_uris.append(uri)
 
+# add the found songs to the created playlist
 converter.add_to_spotify(spotify_playlist_id, spotify_song_uris)
