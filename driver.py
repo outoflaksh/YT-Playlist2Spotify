@@ -1,27 +1,33 @@
 from main import Youtube2Spotify
 
-print("\n## Youtube2Spotify - Convert YT playlist to Spotify ##\n\n")
 
-pl_name = input("Enter new Spotify playlist's name: ")
-pl_desc = input("Enter playlist description: ")
+def main():
+    print("\n## Youtube2Spotify - Convert YT playlist to Spotify ##\n\n")
 
-print("\n")
+    pl_name = input("Enter new Spotify playlist's name: ")
+    pl_desc = input("Enter playlist description: ")
 
-converter = Youtube2Spotify()
+    print("\n")
 
-# Create a new spotify playlist
-spotify_playlist_id = converter.create_spotify_playlist(pl_name, pl_desc)
+    converter = Youtube2Spotify()
 
-# Retrieve all video titles from a youtube playlist
-yt_vid_titles = converter.get_youtube_playlist()
+    # Create a new spotify playlist
+    spotify_playlist_id = converter.create_spotify_playlist(pl_name, pl_desc)
 
-spotify_song_uris = []
+    # Retrieve all video titles from a youtube playlist
+    yt_vid_titles = converter.get_youtube_playlist()
 
-# get the song URI's from spotify if the song is found
-for video in yt_vid_titles:
-    uri = converter.search_spotify(video)
-    if uri:
-        spotify_song_uris.append(uri)
+    spotify_song_uris = []
 
-# add the found songs to the created playlist
-converter.add_to_spotify(spotify_playlist_id, spotify_song_uris)
+    # get the song URI's from spotify if the song is found
+    for video in yt_vid_titles:
+        uri = converter.search_spotify(video)
+        if uri:
+            spotify_song_uris.append(uri)
+
+    # add the found songs to the created playlist
+    converter.add_to_spotify(spotify_playlist_id, spotify_song_uris)
+
+
+if __name__ == "__main__":
+    main()
